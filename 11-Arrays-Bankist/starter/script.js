@@ -71,6 +71,55 @@ const currencies = new Map([
   ['GBP', 'Pound sterling'],
 ]);
 
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
+
+// let arr = ['a', 'b', 'c', 'd', 'e'];
+// //slice
+// console.log(arr.slice(2));
+// console.log(arr.slice(1, 3));
+// console.log(arr);
+// //SPLICE
+// console.log(arr.splice(1, 3));
+// console.log(arr);
+
+// //REVERSE
+// const arr2 = ['k', 'j', 'i', 'h', 'g', 'f'];
+// console.log(arr2.reverse());
+
+// //AT
+// const arr3 = [23, 11, 64];
+
+// console.log(arr3.at(1));
+// console.log('jonas'.at(1));
+
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+for (const movement of movements) {
+  if (movement > 0) {
+    console.log(`Money credited is:${movement}`);
+  } else console.log(`Money debited is:${Math.abs(movement)}`);
+}
+console.log('--- for of entries ---');
+for (const [i, movement] of movements.entries()) {
+  if (movement > 0) {
+    console.log(`Money credited at ${i + 1} is:${movement}`);
+  } else console.log(`Money debited ${i + 1} is:${Math.abs(movement)}`);
+}
+console.log('--- forEach ---');
+
+movements.forEach(function (movement) {
+  if (movement > 0) {
+    console.log(`Money credited is:${movement}`);
+  } else console.log(`Money debited is:${Math.abs(movement)}`);
+});
+
+console.log('--- forEach with index ---');
+
+movements.forEach(function (movement, i, arr) {
+  if (movement > 0) {
+    console.log(`Money credited ${i + 1} is:${movement} `);
+  } else console.log(`Money debited ${i + 1} is:${Math.abs(movement)}`);
+  console.log(arr);
+});
