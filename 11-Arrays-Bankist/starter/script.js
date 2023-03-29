@@ -65,11 +65,11 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 // LECTURES
 
-const currencies = new Map([
-  ['USD', 'United States dollar'],
-  ['EUR', 'Euro'],
-  ['GBP', 'Pound sterling'],
-]);
+// const currencies = new Map([
+//   ['USD', 'United States dollar'],
+//   ['EUR', 'Euro'],
+//   ['GBP', 'Pound sterling'],
+// ]);
 
 // const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
@@ -94,32 +94,50 @@ const currencies = new Map([
 // console.log(arr3.at(1));
 // console.log('jonas'.at(1));
 
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
-for (const movement of movements) {
-  if (movement > 0) {
-    console.log(`Money credited is:${movement}`);
-  } else console.log(`Money debited is:${Math.abs(movement)}`);
-}
-console.log('--- for of entries ---');
-for (const [i, movement] of movements.entries()) {
-  if (movement > 0) {
-    console.log(`Money credited at ${i + 1} is:${movement}`);
-  } else console.log(`Money debited ${i + 1} is:${Math.abs(movement)}`);
-}
-console.log('--- forEach ---');
+// for (const movement of movements) {
+//   if (movement > 0) {
+//     console.log(`Money credited is:${movement}`);
+//   } else console.log(`Money debited is:${Math.abs(movement)}`);
+// }
+// console.log('--- for of entries ---');
+// for (const [i, movement] of movements.entries()) {
+//   if (movement > 0) {
+//     console.log(`Money credited at ${i + 1} is:${movement}`);
+//   } else console.log(`Money debited ${i + 1} is:${Math.abs(movement)}`);
+// }
+// console.log('--- forEach ---');
 
-movements.forEach(function (movement) {
-  if (movement > 0) {
-    console.log(`Money credited is:${movement}`);
-  } else console.log(`Money debited is:${Math.abs(movement)}`);
+// movements.forEach(function (movement) {
+//   if (movement > 0) {
+//     console.log(`Money credited is:${movement}`);
+//   } else console.log(`Money debited is:${Math.abs(movement)}`);
+// });
+
+// console.log('--- forEach with index ---');
+
+// movements.forEach(function (movement, i, arr) {
+//   if (movement > 0) {
+//     console.log(`Money credited ${i + 1} is:${movement} `);
+//   } else console.log(`Money debited ${i + 1} is:${Math.abs(movement)}`);
+//   console.log(arr);
+// });
+
+const currencies = new Map([
+  ['USD', 'United States Dollar'],
+  ['EUR', 'Euro'],
+  ['GBP', 'pound sterling'],
+]);
+
+currencies.forEach(function (value, key, map) {
+  console.log(`${key}:${value}`);
+  console.log(map);
 });
 
-console.log('--- forEach with index ---');
+const currenciesUnique = new Set(['USD', 'USD', 'EUR', 'GBP', 'EUR', 'GBP']);
 
-movements.forEach(function (movement, i, arr) {
-  if (movement > 0) {
-    console.log(`Money credited ${i + 1} is:${movement} `);
-  } else console.log(`Money debited ${i + 1} is:${Math.abs(movement)}`);
-  console.log(arr);
+currenciesUnique.forEach(function (value, key, map) {
+  console.log(`${key}:${value}`);
+  console.log(map);
 });
