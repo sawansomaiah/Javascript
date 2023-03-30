@@ -61,6 +61,23 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+//Bankist App
+
+const displayMovemnts = function (movements) {
+  movements.forEach(function (mov, i) {
+    let type = mov > 0 ? 'deposit' : 'withdrawal';
+    let html = `<div class="movements__row">
+            <div class="movements__type movements__type--${type}">${
+      i + 3
+    } ${type}</div>
+            
+            <div class="movements__value">${mov}€</div>
+        </div>`;
+    containerMovements.insertAdjacentHTML('afterbegin', html);
+  });
+};
+
+displayMovemnts(account1.movements);
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -124,20 +141,83 @@ const inputClosePin = document.querySelector('.form__input--pin');
 //   console.log(arr);
 // });
 
-const currencies = new Map([
-  ['USD', 'United States Dollar'],
-  ['EUR', 'Euro'],
-  ['GBP', 'pound sterling'],
-]);
+// const currencies = new Map([
+//   ['USD', 'United States Dollar'],
+//   ['EUR', 'Euro'],
+//   ['GBP', 'pound sterling'],
+// ]);
 
-currencies.forEach(function (value, key, map) {
-  console.log(`${key}:${value}`);
-  console.log(map);
-});
+// currencies.forEach(function (value, key, map) {
+//   console.log(`${key}:${value}`);
+//   console.log(map);
+// });
 
-const currenciesUnique = new Set(['USD', 'USD', 'EUR', 'GBP', 'EUR', 'GBP']);
+// const currenciesUnique = new Set(['USD', 'USD', 'EUR', 'GBP', 'EUR', 'GBP']);
 
-currenciesUnique.forEach(function (value, key, map) {
-  console.log(`${key}:${value}`);
-  console.log(map);
-});
+// currenciesUnique.forEach(function (value, key, map) {
+//   console.log(`${key}:${value}`);
+//   console.log(map);
+// });
+
+// TEST DATA 1: Julia's data [3, 5, 2, 12, 7], Kate's data [4, 1, 15, 8, 3]
+// TEST DATA 2: Julia's data [9, 16, 6, 8, 3], Kate's data [10, 5, 6, 1, 4]
+
+// const juliaData1 = [3, 5, 2, 12, 7];
+// const kateData1 = [4, 1, 15, 8, 3];
+// const juliaData2 = [9, 16, 6, 8, 3];
+// const kateData2 = [10, 5, 6, 1, 4];
+
+// const checkDogs = function (dogsJulia, dogsKate) {
+//   const juliaDataShallow = dogsJulia.slice();
+
+//   const juliaNoCats = juliaDataShallow.slice(1, -2);
+//   const JKData = juliaNoCats.concat(dogsKate);
+//   console.log(JKData);
+
+//   JKData.forEach(function (age, i) {
+//     const ageDog =
+//       age >= 3 ? `an adult, and is ${age} years old` : 'still a puppy';
+//     console.log(`Dog number ${i + 1} is ${ageDog}`);
+//   });
+// };
+
+// checkDogs(juliaData1, kateData1);
+// checkDogs(juliaData2, kateData2);
+
+//MAP
+
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+// const euroToUSD = 1.1;
+
+// const movementsUSD = movements.map(mov => {
+//   return mov * euroToUSD;
+// });
+
+// console.log(movementsUSD);
+
+// const movementsDescription = movements.map((mov, i) => {
+//   return `Movement ${i + 1} : You ${
+//     mov > 0 ? 'deposited' : 'withdrew'
+//   } ${Math.abs(mov)}`;
+// });
+
+// const movementsDescriptions = movements.map(
+//   (mov, i) =>
+//     `Movement ${i + 1}: You ${mov > 0 ? 'deposited' : 'withdrew'} ${Math.abs(
+//       mov
+//     )}`
+// );
+// console.log(movementsDescription);
+const createUsername = function (acc) {
+  acc.forEach(function (accs) {
+    accs.username = accs.owner
+      .toLowerCase()
+      .split(' ')
+      .map(name => name[0])
+      .join('');
+  });
+};
+
+createUsername(accounts);
+console.log(accounts);
