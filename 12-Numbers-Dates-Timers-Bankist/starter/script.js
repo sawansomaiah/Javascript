@@ -16,14 +16,14 @@ const account1 = {
   pin: 1111,
 
   movementsDates: [
-    '2019-11-18T21:31:17.178Z',
-    '2019-12-23T07:42:02.383Z',
-    '2020-01-28T09:15:04.904Z',
-    '2020-04-01T10:17:24.185Z',
-    '2020-05-08T14:11:59.604Z',
-    '2020-05-27T17:01:17.194Z',
-    '2020-07-11T23:36:17.929Z',
-    '2020-07-12T10:51:36.790Z',
+    '2023-04-18T21:31:17.178Z',
+    '2023-03-23T07:42:02.383Z',
+    '2023-01-28T09:15:04.904Z',
+    '2023-04-01T10:17:24.185Z',
+    '2023-05-08T14:11:59.604Z',
+    '2023-06-03T17:01:17.194Z',
+    '2023-06-05T12:00:00.929Z',
+    '2023-06-04T10:51:36.790Z',
   ],
   currency: 'EUR',
   locale: 'pt-PT', // de-DE
@@ -81,20 +81,39 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 // Functions
 
-const displayMovements = function (movements, sort = false) {
+const formatMovementDate = function(date){
+  const calcDaysPassed = (day1 , day2) => Math.round(Math.abs((day2 - day1)/ (1000*60*60*24)))
+
+    const daysPassed = calcDaysPassed(new Date(), date);
+
+if(daysPassed === 0) return 'Today';
+if(daysPassed === 1) return 'Yesterday';
+if(daysPassed <= 7) return `${daysPassed} days ago`;
+else {
+    const day = `${date.getDate()}`.padStart(2,0);
+    const month = `${date.getMonth()}`.padStart(2,0);
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`}
+}
+const displayMovements = function (acc, sort = false) {
   containerMovements.innerHTML = '';
 
-  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+  
+  const movs = sort ? acc.movements.slice().sort((a, b) => a - b) : acc.movements;
 
   movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
+
+    const date = new Date(acc.movementsDates[i]);
+    
+   const displayDate = formatMovementDate(date)
 
     const html = `
       <div class="movements__row">
         <div class="movements__type movements__type--${type}">${
       i + 1
-    } ${type}</div>
-        <div class="movements__value">${mov}€</div>
+    } ${type}</div><div class="movements__date">${displayDate}</div>
+        <div class="movements__value">${mov.toFixed(2)}€</div>
       </div>
     `;
 
@@ -104,19 +123,19 @@ const displayMovements = function (movements, sort = false) {
 
 const calcDisplayBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${acc.balance}€`;
+  labelBalance.textContent = `${acc.balance.toFixed(2)}€`;
 };
 
 const calcDisplaySummary = function (acc) {
   const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumIn.textContent = `${incomes}€`;
+  labelSumIn.textContent = `${incomes.toFixed(2)}€`;
 
   const out = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumOut.textContent = `${Math.abs(out)}€`;
+  labelSumOut.textContent = `${Math.abs(out).toFixed(2)}€`;
 
   const interest = acc.movements
     .filter(mov => mov > 0)
@@ -126,7 +145,7 @@ const calcDisplaySummary = function (acc) {
       return int >= 1;
     })
     .reduce((acc, int) => acc + int, 0);
-  labelSumInterest.textContent = `${interest}€`;
+  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
 };
 
 const createUsernames = function (accs) {
@@ -142,7 +161,7 @@ createUsernames(accounts);
 
 const updateUI = function (acc) {
   // Display movements
-  displayMovements(acc.movements);
+  displayMovements(acc);
 
   // Display balance
   calcDisplayBalance(acc);
@@ -154,6 +173,14 @@ const updateUI = function (acc) {
 ///////////////////////////////////////
 // Event handlers
 let currentAccount;
+
+//FAKE LOGIN
+
+updateUI(currentAccount);
+containerApp.style.opacity = 100;
+
+//Experimenting API
+
 
 btnLogin.addEventListener('click', function (e) {
   // Prevent form from submitting
@@ -171,6 +198,17 @@ btnLogin.addEventListener('click', function (e) {
     }`;
     containerApp.style.opacity = 100;
 
+    //Diplay Date
+    const now = new Date();
+
+const date = `${now.getDate()}`.padStart(2,0);
+const month = `${now.getMonth()}`.padStart(2,0);
+const day = now.getDay();
+const year = now.getFullYear();
+const hour = `${now.getHours()}`.padStart(2,0);
+const min = `${now.getMinutes()}`.padStart(2,0);
+
+// labelDate.textContent = `${date}/${month}/${year}, ${hour}:${min}`
     // Clear input fields
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
@@ -198,6 +236,10 @@ btnTransfer.addEventListener('click', function (e) {
     currentAccount.movements.push(-amount);
     receiverAcc.movements.push(amount);
 
+    // Adding date to the object
+    currentAccount.movementsDates.push(new Date().toISOString())
+    receiverAcc.movementsDates.push(new Date().toISOString())
+
     // Update UI
     updateUI(currentAccount);
   }
@@ -206,12 +248,14 @@ btnTransfer.addEventListener('click', function (e) {
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
 
-  const amount = Number(inputLoanAmount.value);
+  const amount = +(Math.floor(inputLoanAmount.value));
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
     // Add movement
     currentAccount.movements.push(amount);
 
+    // Add Date
+    currentAccount.movementsDates.push(new Date().toISOString())
     // Update UI
     updateUI(currentAccount);
   }
@@ -251,3 +295,29 @@ btnSort.addEventListener('click', function (e) {
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
+const now = new Date();
+
+const options = {hour : 'numeric', minute: 'numeric', day: 'numeric', month:'long', year: 'numeric'
+               }
+console.log(currentAccount.locale)
+labelDate.textContent = new Intl.DateTimeFormat(currentAccount.locale,options).format(now)
+
+labelBalance.addEventListener('click', function(){
+  [...document.querySelectorAll('.movements__row')].forEach(function(row, i, arr){
+
+    if(i%2 === 0){  
+row.style.backgroundColor = 'orange'}
+})
+})
+
+const future =  new Date(2023, 3,27, 15, 23)
+console.log(+future)
+
+const calcDaysPassed =  (day1 , day2) => Math.abs((day1 - day2)/ (1000*60*60*24))
+
+
+
+const days1 = calcDaysPassed(new Date(2037, 3, 14), new Date(2037, 3, 4));
+
+console.log(days1)
+
