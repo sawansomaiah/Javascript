@@ -97,7 +97,7 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
 
 tabsContainer.addEventListener('click', function (e) {
   const clicked = e.target.closest('.operations__tab');
-
+  console.log(clicked)
   // Guard clause
   if (!clicked) return;
 
@@ -112,6 +112,7 @@ tabsContainer.addEventListener('click', function (e) {
   document
     .querySelector(`.operations__content--${clicked.dataset.tab}`)
     .classList.add('operations__content--active');
+    console.log(clicked.dataset)
 });
 
 ///////////////////////////////////////
@@ -335,10 +336,10 @@ document
     message.parentElement.removeChild(message);
   });
 
-  
+
 ///////////////////////////////////////
 // Styles, Attributes and Classes
-  
+
 // Styles
 message.style.backgroundColor = '#37383d';
 message.style.width = '120%';
